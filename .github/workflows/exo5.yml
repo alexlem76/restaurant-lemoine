@@ -1,0 +1,38 @@
+name: exercice5
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  exo5:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        caisse: [18, 20, 22]
+        
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+      
+      - name: Installer Node.jobs
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Initialisation
+        run: npm init -y
+
+      - name: Installer les dépendances
+        run: npm install --save-dev jest
+
+      - name: Installer Eslint
+        run: npm install --save-dev eslint @eslint/js globals
+
+      - name: Lancer Eslint
+        run: npm run lint
+        
+      - name: Lancer les tests
+        run: npm test -- --testNamePattern="${{ matrix.caisse }}"
+        
