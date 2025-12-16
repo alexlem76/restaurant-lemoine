@@ -1,11 +1,11 @@
-name: exercice3
+name: exercice4
 
 on:
   push:
     branches: [main]
 
 jobs:
-  exo3:
+  exo4:
     runs-on: ubuntu-latest
     steps:
       - name: Récupérer le code
@@ -21,6 +21,12 @@ jobs:
 
       - name: Installer les dépendances
         run: npm install --save-dev jest
+
+      - name: Installer Eslint
+        run: npm install --save-dev eslint @eslint/js globals
+
+      - name: Lancer Eslint
+        run: npm run lint
         
       - name: Lancer les tests
         run: npm test
