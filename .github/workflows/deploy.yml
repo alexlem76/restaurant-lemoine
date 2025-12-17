@@ -15,13 +15,25 @@ jobs:
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Initialisation
+        run: npm init -y
+      - name: Installer les dépendances
+        run: npm install --save-dev jest
+      - name: Installer Eslint
+        run: npm install --save-dev eslint @eslint/js globals
+      - name: Lancer Eslint
+        run: npm run lint
       - name: Configurer GitHub Pages
         uses: actions/configure-pages@v4
       - name: Uploader les fichiers
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-      - name: Lancer les tests
+      - name: Lancer les tests Jest
         run: npm test
   deploy:
     needs: test
