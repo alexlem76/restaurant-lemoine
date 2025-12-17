@@ -76,4 +76,4 @@ jobs:
       - name: Notifications
         run:
           echo "https://${{ secrets.USERNAME }}.github.io/${{ secrets.REPO }}"
-          echo "${{ %}}"
+
