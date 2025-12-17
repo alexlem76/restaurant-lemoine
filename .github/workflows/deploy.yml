@@ -54,7 +54,7 @@ jobs:
         run: |
           echo "COMMIT_MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
           echo "DEPLOY_DATE=$(date)" >> $GITHUB_ENV
-      - name: Envoyer notification
+      - name: Notifications
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: |
@@ -71,9 +71,5 @@ jobs:
               ]
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: https://${{ secrets.USERNAME }}.github.io/${{ secrets.REPO }}
           echo "Le restaurant est ouvert !"
-      - name: Notifications
-        run:
-          echo "https://${{ secrets.USERNAME }}.github.io/${{ secrets.REPO }}"
-
