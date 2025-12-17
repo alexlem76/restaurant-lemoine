@@ -40,17 +40,40 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
       - name: Déployer sur GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
       - name: Attendre que le site soit prêt
-        run: sleep 30
+        run: sleep 5
       - name: Vérifier que le restaurant est ouvert
         run: |
           curl --fail https://${{ secrets.USERNAME }}.github.io/${{ secrets.REPO }}/ || exit 1
+      - name: Préparer les informations de notification
+        run: |
+          echo "COMMIT_MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+          echo "DEPLOY_DATE=$(date)" >> $GITHUB_ENV
+      - name: Envoyer notification
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": "Déploiement réussi !",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Déploiement sur GitHub Pages*\n\n:globe_with_meridians: **URL du site:** ${{ steps.deployment.outputs.page_url }}\n:calendar: **Date du déploiement:** ${{ env.DEPLOY_DATE }}\n:person: **Qui a déployé:** ${{ github.actor }}\n:git-commit: **Numéro du commit:** ${{ github.sha }}\n:speech_balloon: **Message du commit:** ${{ env.COMMIT_MESSAGE }}\n:branch: **Branch:** ${{ github.ref_name }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           echo "Le restaurant est ouvert !"
       - name: Notifications
         run:
           echo "https://${{ secrets.USERNAME }}.github.io/${{ secrets.REPO }}"
-
-
+          echo "${{ %}}"
