@@ -51,6 +51,6 @@ jobs:
           echo "Le restaurant est ouvert !"
       - name: Notifications
         run:
-          echo "${{ steps.deployment.outputs.page_url }}"
+          echo "https://${{ secrets.USERNAME }}.github.io/${{ secrets.REPO }}"
 
 
